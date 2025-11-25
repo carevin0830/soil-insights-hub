@@ -50,20 +50,13 @@ const Index = () => {
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
             <ChevronDown className="w-8 h-8 text-white/60" />
           </div>
-
-          {/* Pagination Dots */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary"></div>
-            <div className="w-2 h-2 rounded-full bg-white/30"></div>
-            <div className="w-2 h-2 rounded-full bg-white/30"></div>
-          </div>
         </section>
 
         {/* Key Stats Cards */}
         <section className="py-20 relative">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
                     <Droplets className="w-10 h-10 text-primary" />
@@ -73,7 +66,7 @@ const Index = () => {
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-colors">
                     <Thermometer className="w-10 h-10 text-secondary" />
@@ -83,7 +76,7 @@ const Index = () => {
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors">
                     <Map className="w-10 h-10 text-accent" />
