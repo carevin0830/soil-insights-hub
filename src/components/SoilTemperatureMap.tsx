@@ -2,7 +2,13 @@ import { useEffect, useState, useRef } from 'react';
 import L from 'leaflet';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from './ui/card';
-import { MapPin } from 'lucide-react';
+import { MapPin, Pencil, Trash2 } from 'lucide-react';
+import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { toast } from 'sonner';
 import 'leaflet/dist/leaflet.css';
 
 interface SoilDataPoint {
@@ -30,6 +36,14 @@ export default function SoilTemperatureMap() {
   const [loading, setLoading] = useState(true);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
+  const [editingPoint, setEditingPoint] = useState<SoilDataPoint | null>(null);
+  const [deletingPoint, setDeletingPoint] = useState<SoilDataPoint | null>(null);
+  const [editForm, setEditForm] = useState({
+    temperature: '',
+    ph: '',
+    fertility_percentage: '',
+    location_name: ''
+  });
 
   useEffect(() => {
     fetchSoilData();
@@ -88,6 +102,73 @@ export default function SoilTemperatureMap() {
       console.error('Error fetching soil data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEdit = (point: SoilDataPoint) => {
+    setEditingPoint(point);
+    setEditForm({
+      temperature: point.temperature.toString(),
+      ph: point.ph.toString(),
+      fertility_percentage: point.fertility_percentage?.toString() || '',
+      location_name: point.location_name || ''
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingPoint) return;
+
+    try {
+      const { error } = await supabase
+        .from('soil_data')
+        .update({
+          temperature: parseFloat(editForm.temperature),
+          ph: parseFloat(editForm.ph),
+          fertility_percentage: editForm.fertility_percentage ? parseFloat(editForm.fertility_percentage) : null,
+          location_name: editForm.location_name
+        })
+        .eq('id', editingPoint.id);
+
+      if (error) throw error;
+
+      toast.success('Soil data updated successfully');
+      setEditingPoint(null);
+      
+      // Refresh map
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+      await fetchSoilData();
+    } catch (error: any) {
+      toast.error('Failed to update soil data');
+      console.error('Error updating soil data:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deletingPoint) return;
+
+    try {
+      const { error } = await supabase
+        .from('soil_data')
+        .delete()
+        .eq('id', deletingPoint.id);
+
+      if (error) throw error;
+
+      toast.success('Soil data deleted successfully');
+      setDeletingPoint(null);
+      
+      // Refresh map
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+      await fetchSoilData();
+    } catch (error: any) {
+      toast.error('Failed to delete soil data');
+      console.error('Error deleting soil data:', error);
     }
   };
 
@@ -160,10 +241,86 @@ export default function SoilTemperatureMap() {
       <Card className="p-6">
         <div className="flex items-center justify-center h-[500px]">
           <p className="text-muted-foreground">No soil data available yet</p>
-        </div>
-      </Card>
-    );
-  }
+      </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={!!editingPoint} onOpenChange={(open) => !open && setEditingPoint(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Soil Data</DialogTitle>
+            <DialogDescription>
+              Update the soil measurements for this location
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="location_name">Location Name</Label>
+              <Input
+                id="location_name"
+                value={editForm.location_name}
+                onChange={(e) => setEditForm({ ...editForm, location_name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="temperature">Temperature (°C)</Label>
+              <Input
+                id="temperature"
+                type="number"
+                step="0.1"
+                value={editForm.temperature}
+                onChange={(e) => setEditForm({ ...editForm, temperature: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ph">pH Level</Label>
+              <Input
+                id="ph"
+                type="number"
+                step="0.01"
+                value={editForm.ph}
+                onChange={(e) => setEditForm({ ...editForm, ph: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fertility">Fertility Percentage</Label>
+              <Input
+                id="fertility"
+                type="number"
+                step="0.1"
+                value={editForm.fertility_percentage}
+                onChange={(e) => setEditForm({ ...editForm, fertility_percentage: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingPoint(null)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={!!deletingPoint} onOpenChange={(open) => !open && setDeletingPoint(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Soil Data</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete the data for "{deletingPoint?.location_name || 'Unknown Location'}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </Card>
+  );
+}
 
   return (
     <Card className="overflow-hidden">
@@ -226,6 +383,24 @@ export default function SoilTemperatureMap() {
                         {new Date(point.collected_at).toLocaleDateString()}
                       </p>
                     )}
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleEdit(point)}
+                    >
+                      <Pencil className="w-3 h-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => setDeletingPoint(point)}
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" />
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </div>
