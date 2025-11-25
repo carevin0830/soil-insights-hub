@@ -7,15 +7,17 @@ import SoilTemperatureMap from "@/components/SoilTemperatureMap";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section with Background */}
+    <div className="min-h-screen bg-background relative">
+      {/* Fixed Background */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-fixed -z-10"
+        style={{ backgroundImage: `url(${agriculturalBg})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background/85" />
+      </div>
+
+      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${agriculturalBg})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background/90" />
-        </div>
         
         <div className="relative z-10 container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-8">
@@ -41,7 +43,7 @@ const Index = () => {
 
           {/* Key Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="backdrop-blur-sm bg-card/90 border-2 shadow-xl">
+            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -55,7 +57,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-sm bg-card/90 border-2 shadow-xl">
+            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-secondary/10">
@@ -69,7 +71,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-sm bg-card/90 border-2 shadow-xl">
+            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-accent/10">
@@ -87,16 +89,16 @@ const Index = () => {
       </section>
 
       {/* Interactive Map Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Live Soil Data Map</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow">Live Soil Data Map</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-sm">
               Interactive visualization of soil conditions across all monitored locations
             </p>
           </div>
 
-          <div className="bg-card rounded-2xl shadow-2xl overflow-hidden border-2">
+          <div className="backdrop-blur-sm bg-card/80 rounded-2xl shadow-2xl overflow-hidden border-2">
             <SoilTemperatureMap />
           </div>
 
@@ -127,17 +129,17 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Platform Features</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow">Platform Features</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-sm">
               Comprehensive tools for modern agricultural monitoring
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg group">
+            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
                   <Map className="w-8 h-8 text-primary" />
@@ -149,7 +151,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg group">
+            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors">
                   <BarChart3 className="w-8 h-8 text-accent" />
@@ -161,7 +163,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg group">
+            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-colors">
                   <TrendingUp className="w-8 h-8 text-secondary" />
@@ -194,7 +196,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t bg-card">
+      <footer className="py-8 border-t backdrop-blur-md bg-card/70 relative">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
           <p>© 2025 Soil Health Visualization Platform. Supporting sustainable agriculture.</p>
         </div>
