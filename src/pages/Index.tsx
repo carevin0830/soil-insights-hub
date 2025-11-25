@@ -16,7 +16,7 @@ const Index = () => {
     <div className="min-h-screen relative">
       {/* Fixed Background */}
       <div 
-        className="fixed inset-0 bg-cover bg-center z-0"
+        className="fixed inset-0 bg-cover bg-center bg-fixed z-0"
         style={{ backgroundImage: `url(${agriculturalBg})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
