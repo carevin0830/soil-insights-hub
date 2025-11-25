@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { useEffect, useState, useRef } from 'react';
+import L from 'leaflet';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from './ui/card';
 import { MapPin } from 'lucide-react';
@@ -28,10 +28,27 @@ const getTemperatureColor = (temp: number): string => {
 export default function SoilTemperatureMap() {
   const [soilData, setSoilData] = useState<SoilDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
     fetchSoilData();
   }, []);
+
+  useEffect(() => {
+    // Initialize map when data is loaded and container is ready
+    if (!loading && soilData.length > 0 && mapRef.current && !mapInstanceRef.current) {
+      initializeMap();
+    }
+    
+    // Cleanup
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [loading, soilData]);
 
   const fetchSoilData = async () => {
     try {
@@ -74,6 +91,60 @@ export default function SoilTemperatureMap() {
     }
   };
 
+  const initializeMap = () => {
+    if (!mapRef.current || mapInstanceRef.current) return;
+
+    // Calculate center
+    const avgLat = soilData.reduce((sum, p) => sum + p.coordinates![0], 0) / soilData.length;
+    const avgLng = soilData.reduce((sum, p) => sum + p.coordinates![1], 0) / soilData.length;
+
+    // Create map
+    const map = L.map(mapRef.current).setView([avgLat, avgLng], 10);
+    mapInstanceRef.current = map;
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Add markers
+    soilData.forEach(point => {
+      if (!point.coordinates) return;
+
+      const color = getTemperatureColor(point.temperature);
+      
+      // Create circle marker
+      const marker = L.circleMarker(point.coordinates, {
+        radius: 10,
+        fillColor: color,
+        color: '#fff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).addTo(map);
+
+      // Create popup content
+      const popupContent = `
+        <div style="padding: 8px; min-width: 200px;">
+          <h4 style="font-weight: 600; margin-bottom: 8px;">${point.location_name || 'Unknown Location'}</h4>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+            <p>
+              <span style="font-weight: 500;">Temperature:</span>
+              <span style="color: ${color}; font-weight: 600;"> ${point.temperature.toFixed(1)}°C</span>
+              ${point.temp_category ? `<span style="font-size: 12px;"> (${point.temp_category})</span>` : ''}
+            </p>
+            <p><span style="font-weight: 500;">pH:</span> ${point.ph.toFixed(2)}</p>
+            ${point.fertility_percentage ? `<p><span style="font-weight: 500;">Fertility:</span> ${point.fertility_percentage.toFixed(1)}%</p>` : ''}
+            ${point.collected_at ? `<p style="font-size: 12px; color: #666; margin-top: 4px;">${new Date(point.collected_at).toLocaleDateString()}</p>` : ''}
+          </div>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent);
+    });
+  };
+
   if (loading) {
     return (
       <Card className="p-6">
@@ -94,85 +165,12 @@ export default function SoilTemperatureMap() {
     );
   }
 
-  // Calculate map center from data points
-  const getMapCenter = (): [number, number] => {
-    if (soilData.length === 0) return [0, 0];
-    
-    const validPoints = soilData.filter((p): p is SoilDataPoint & { coordinates: [number, number] } => 
-      p.coordinates !== undefined
-    );
-    
-    if (validPoints.length === 0) return [0, 0];
-    
-    const avgLat = validPoints.reduce((sum, p) => sum + p.coordinates[0], 0) / validPoints.length;
-    const avgLng = validPoints.reduce((sum, p) => sum + p.coordinates[1], 0) / validPoints.length;
-    
-    return [avgLat, avgLng];
-  };
-
   return (
     <Card className="overflow-hidden">
       <div className="p-6">
         {/* Interactive Map */}
         <div className="mb-6 h-[500px] rounded-lg overflow-hidden border border-border">
-          <MapContainer
-            center={getMapCenter()}
-            zoom={soilData.length > 0 ? 10 : 2}
-            style={{ height: '100%', width: '100%' }}
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {soilData.map((point) => (
-              point.coordinates && (
-                <CircleMarker
-                  key={point.id}
-                  center={point.coordinates}
-                  radius={10}
-                  fillColor={getTemperatureColor(point.temperature)}
-                  color="#fff"
-                  weight={2}
-                  opacity={1}
-                  fillOpacity={0.8}
-                >
-                  <Popup>
-                    <div className="p-2">
-                      <h4 className="font-semibold mb-2">
-                        {point.location_name || 'Unknown Location'}
-                      </h4>
-                      <div className="space-y-1 text-sm">
-                        <p>
-                          <span className="font-medium">Temperature:</span>{' '}
-                          <span style={{ color: getTemperatureColor(point.temperature) }}>
-                            {point.temperature.toFixed(1)}°C
-                          </span>
-                          {point.temp_category && (
-                            <span className="text-xs ml-1">({point.temp_category})</span>
-                          )}
-                        </p>
-                        <p>
-                          <span className="font-medium">pH:</span> {point.ph.toFixed(2)}
-                        </p>
-                        {point.fertility_percentage && (
-                          <p>
-                            <span className="font-medium">Fertility:</span>{' '}
-                            {point.fertility_percentage.toFixed(1)}%
-                          </p>
-                        )}
-                        {point.collected_at && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {new Date(point.collected_at).toLocaleDateString()}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </Popup>
-                </CircleMarker>
-              )
-            ))}
-          </MapContainer>
+          <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
         </div>
         
         {/* Data Cards */}
