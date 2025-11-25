@@ -13,7 +13,7 @@ const Index = () => {
         className="fixed inset-0 bg-cover bg-center z-0"
         style={{ backgroundImage: `url(${agriculturalBg})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background/50" />
       </div>
 
       {/* Content Wrapper */}
