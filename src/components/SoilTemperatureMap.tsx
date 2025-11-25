@@ -1,10 +1,7 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from './ui/card';
-import 'leaflet/dist/leaflet.css';
-
-// Lazy load the map component
-const LazyMap = lazy(() => import('./SoilMap'));
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 interface SoilDataPoint {
   id: string;
@@ -16,6 +13,15 @@ interface SoilDataPoint {
   collected_at: string | null;
   temp_category: string | null;
 }
+
+// Get color based on temperature
+const getTemperatureColor = (temp: number): string => {
+  if (temp < 15) return '#4A90E2';
+  if (temp < 20) return '#50C878';
+  if (temp < 25) return '#F4D03F';
+  if (temp < 30) return '#F39C12';
+  return '#E74C3C';
+};
 
 export default function SoilTemperatureMap() {
   const [soilData, setSoilData] = useState<SoilDataPoint[]>([]);
@@ -44,8 +50,8 @@ export default function SoilTemperatureMap() {
   if (loading) {
     return (
       <Card className="p-6">
-        <div className="flex items-center justify-center h-[500px]">
-          <p className="text-muted-foreground">Loading map data...</p>
+        <div className="flex items-center justify-center h-[400px]">
+          <p className="text-muted-foreground">Loading soil data...</p>
         </div>
       </Card>
     );
@@ -54,7 +60,7 @@ export default function SoilTemperatureMap() {
   if (soilData.length === 0) {
     return (
       <Card className="p-6">
-        <div className="flex items-center justify-center h-[500px]">
+        <div className="flex items-center justify-center h-[400px]">
           <p className="text-muted-foreground">No soil data available yet</p>
         </div>
       </Card>
@@ -63,15 +69,58 @@ export default function SoilTemperatureMap() {
 
   return (
     <Card className="overflow-hidden">
-      <Suspense
-        fallback={
-          <div className="h-[500px] w-full flex items-center justify-center">
-            <p className="text-muted-foreground">Loading map...</p>
-          </div>
-        }
-      >
-        <LazyMap soilData={soilData} />
-      </Suspense>
+      <div className="p-6">
+        <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          <p className="text-sm text-yellow-800 dark:text-yellow-200">
+            <strong>Note:</strong> Interactive map temporarily unavailable due to library compatibility issues. 
+            Showing data in table format. Map feature will be restored soon.
+          </p>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Location</TableHead>
+                <TableHead>Temperature</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>pH</TableHead>
+                <TableHead>Fertility</TableHead>
+                <TableHead>Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {soilData.map((point) => (
+                <TableRow key={point.id}>
+                  <TableCell className="font-medium">
+                    {point.location_name || 'Unknown Location'}
+                  </TableCell>
+                  <TableCell>
+                    <span 
+                      className="font-semibold"
+                      style={{ color: getTemperatureColor(point.temperature) }}
+                    >
+                      {point.temperature.toFixed(1)}°C
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-xs px-2 py-1 rounded-full bg-muted">
+                      {point.temp_category || 'N/A'}
+                    </span>
+                  </TableCell>
+                  <TableCell>{point.ph.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {point.fertility_percentage ? `${point.fertility_percentage.toFixed(1)}%` : 'N/A'}
+                  </TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {point.collected_at ? new Date(point.collected_at).toLocaleDateString() : 'N/A'}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
       
       {/* Legend */}
       <div className="p-4 bg-muted/30 border-t">
