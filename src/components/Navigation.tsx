@@ -27,13 +27,13 @@ const Navigation = () => {
           </a>
         </div>
 
-        {/* CTA Button */}
+        {/* Admin Button */}
         <Link to="/auth">
           <Button 
             variant="outline" 
             className="border-2 border-white text-white hover:bg-white hover:text-background transition-all uppercase tracking-wider text-sm"
           >
-            Get Started
+            Admin
           </Button>
         </Link>
       </div>
