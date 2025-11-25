@@ -1,13 +1,12 @@
-import leafIcon from "@/assets/leaf-icon.png";
+import { Leaf } from "lucide-react";
 
 export const LoadingScreen = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-6">
-        <img
-          src={leafIcon}
-          alt="Loading"
-          className="w-20 h-20 animate-[spin_2s_ease-in-out_infinite] drop-shadow-lg"
+        <Leaf 
+          className="w-20 h-20 text-primary animate-[spin_2s_ease-in-out_infinite] drop-shadow-lg" 
+          strokeWidth={1.5}
         />
         <div className="flex flex-col items-center gap-3 w-64">
           <p className="text-muted-foreground animate-pulse text-sm font-medium">Loading...</p>
