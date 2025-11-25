@@ -36,14 +36,15 @@ const Index = () => {
             <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light">
               Monitoring Platform
             </p>
-            <Link to="/dashboard">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl"
-              >
-                Discover
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl"
+              onClick={() => {
+                document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Discover
+            </Button>
           </div>
 
           {/* Scroll Indicator */}
@@ -91,6 +92,7 @@ const Index = () => {
 
         {/* Interactive Map Section */}
         <section 
+          id="map-section"
           ref={mapSection.ref}
           className={`py-20 relative transition-all duration-700 ${
             mapSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
