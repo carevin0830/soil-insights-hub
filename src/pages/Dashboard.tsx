@@ -123,6 +123,23 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Info Card */}
+        <Card className="mb-8 border-primary/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              Welcome to the Platform
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              You're currently viewing the dashboard. More features including interactive maps,
+              data entry forms, and advanced analytics are being developed. The platform monitors
+              soil health across Sallapadan, Bucay, and Lagangilang municipalities.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/add-soil-data')}>
@@ -223,23 +240,6 @@ const Dashboard = () => {
           </div>
           <SoilTemperatureMap />
         </div>
-
-        {/* Info Card */}
-        <Card className="mt-8 border-primary/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Welcome to the Platform
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              You're currently viewing the dashboard. More features including interactive maps,
-              data entry forms, and advanced analytics are being developed. The platform monitors
-              soil health across Sallapadan, Bucay, and Lagangilang municipalities.
-            </p>
-          </CardContent>
-        </Card>
       </main>
     </div>
   );
