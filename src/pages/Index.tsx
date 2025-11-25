@@ -30,15 +30,15 @@ const Index = () => {
         {/* Hero Section */}
         <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
           <div className="relative z-10 container mx-auto px-4 max-w-7xl text-center">
-            <h1 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none">
+            <h1 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none animate-[fade-in_1s_ease-out,scale-in_0.8s_ease-out] drop-shadow-2xl">
               SOIL HEALTH
             </h1>
-            <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light">
+            <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light animate-[fade-in_1.2s_ease-out] [animation-delay:0.3s] opacity-0 [animation-fill-mode:forwards]">
               Monitoring Platform
             </p>
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl"
+              className="bg-primary hover:bg-primary/90 hover:scale-105 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl transition-all duration-300 animate-[fade-in_1s_ease-out,scale-in_0.6s_ease-out] [animation-delay:0.6s] opacity-0 [animation-fill-mode:forwards] hover:shadow-[0_0_30px_rgba(var(--primary)/0.5)]"
               onClick={() => {
                 document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
@@ -48,7 +48,7 @@ const Index = () => {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce [animation-delay:1.2s]">
             <ChevronDown className="w-8 h-8 text-white/60" />
           </div>
         </section>
@@ -57,30 +57,30 @@ const Index = () => {
         <section className="py-20 relative">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all duration-300 group hover:bg-card/95 hover:scale-105 hover:-translate-y-2 animate-[fade-in_0.8s_ease-out] [animation-delay:0.2s] opacity-0 [animation-fill-mode:forwards]">
                 <CardHeader className="text-center">
-                  <div className="mx-auto p-4 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Droplets className="w-10 h-10 text-primary" />
+                  <div className="mx-auto p-4 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-all duration-300 group-hover:scale-110">
+                    <Droplets className="w-10 h-10 text-primary group-hover:animate-pulse" />
                   </div>
                   <CardTitle className="text-2xl mb-2">pH Monitoring</CardTitle>
                   <CardDescription className="text-base">Comprehensive soil acidity tracking and analysis</CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all duration-300 group hover:bg-card/95 hover:scale-105 hover:-translate-y-2 animate-[fade-in_0.8s_ease-out] [animation-delay:0.4s] opacity-0 [animation-fill-mode:forwards]">
                 <CardHeader className="text-center">
-                  <div className="mx-auto p-4 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-colors">
-                    <Thermometer className="w-10 h-10 text-secondary" />
+                  <div className="mx-auto p-4 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-all duration-300 group-hover:scale-110">
+                    <Thermometer className="w-10 h-10 text-secondary group-hover:animate-pulse" />
                   </div>
                   <CardTitle className="text-2xl mb-2">Temperature</CardTitle>
                   <CardDescription className="text-base">Real-time soil temperature monitoring</CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/95">
+              <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:shadow-2xl transition-all duration-300 group hover:bg-card/95 hover:scale-105 hover:-translate-y-2 animate-[fade-in_0.8s_ease-out] [animation-delay:0.6s] opacity-0 [animation-fill-mode:forwards]">
                 <CardHeader className="text-center">
-                  <div className="mx-auto p-4 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors">
-                    <Map className="w-10 h-10 text-accent" />
+                  <div className="mx-auto p-4 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-all duration-300 group-hover:scale-110">
+                    <Map className="w-10 h-10 text-accent group-hover:animate-pulse" />
                   </div>
                   <CardTitle className="text-2xl mb-2">GIS Mapping</CardTitle>
                   <CardDescription className="text-base">Advanced geospatial data visualization</CardDescription>
