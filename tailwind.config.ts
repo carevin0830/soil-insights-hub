@@ -92,11 +92,31 @@ export default {
           "50%": { width: "70%", marginLeft: "15%" },
           "100%": { width: "0%", marginLeft: "100%" },
         },
+        "pop-bounce": {
+          "0%": { 
+            transform: "scale(0)",
+            opacity: "0"
+          },
+          "50%": { 
+            transform: "scale(1.15)",
+            opacity: "1"
+          },
+          "65%": { 
+            transform: "scale(0.9)"
+          },
+          "80%": { 
+            transform: "scale(1.05)"
+          },
+          "100%": { 
+            transform: "scale(1)"
+          },
+        },
       },
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 				"progress": "progress 1.5s ease-in-out infinite",
+				"pop-bounce": "pop-bounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
 			},
     },
   },

@@ -30,15 +30,15 @@ const Index = () => {
         {/* Hero Section */}
         <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
           <div className="relative z-10 container mx-auto px-4 max-w-7xl text-center">
-            <h1 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none">
+            <h1 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none animate-pop-bounce">
               SOIL HEALTH
             </h1>
-            <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light">
+            <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light animate-pop-bounce [animation-delay:0.2s] opacity-0">
               Monitoring Platform
             </p>
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl animate-pop-bounce [animation-delay:0.4s] opacity-0"
               onClick={() => {
                 document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
