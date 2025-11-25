@@ -23,10 +23,10 @@ const Index = () => {
         
         <div className="relative z-10 container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-foreground drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-foreground drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
               Soil Health Monitoring
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-foreground/90 max-w-3xl mx-auto drop-shadow">
+            <p className="text-xl md:text-2xl mb-8 text-foreground/90 max-w-3xl mx-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
               Real-time agricultural data visualization for Sallapadan, Bucay, and Lagangilang
             </p>
             <div className="flex flex-wrap gap-4 justify-center mb-12">
@@ -45,7 +45,7 @@ const Index = () => {
 
           {/* Key Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
+            <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:bg-card/95 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -59,7 +59,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
+            <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:bg-card/95 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-secondary/10">
@@ -73,7 +73,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-md bg-card/70 border-2 shadow-xl hover:bg-card/80 transition-colors">
+            <Card className="backdrop-blur-md bg-card/90 border-2 shadow-xl hover:bg-card/95 transition-colors">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-accent/10">
@@ -94,38 +94,14 @@ const Index = () => {
       <section className="py-20 relative">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow">Live Soil Data Map</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-sm">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Live Soil Data Map</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
               Interactive visualization of soil conditions across all monitored locations
             </p>
           </div>
 
-          <div className="backdrop-blur-sm bg-card/80 rounded-2xl shadow-2xl overflow-hidden border-2">
+          <div className="backdrop-blur-sm bg-card/90 rounded-2xl shadow-2xl overflow-hidden border-2">
             <SoilTemperatureMap />
-          </div>
-
-          {/* Map Legend */}
-          <div className="mt-8 flex flex-wrap gap-6 justify-center">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-red-500"></div>
-              <span className="text-sm text-muted-foreground">Hot (25°C+)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-orange-500"></div>
-              <span className="text-sm text-muted-foreground">Warm (20-25°C)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-              <span className="text-sm text-muted-foreground">Good (15-20°C)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-green-500"></div>
-              <span className="text-sm text-muted-foreground">Ideal (10-15°C)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-              <span className="text-sm text-muted-foreground">Cool (&lt;10°C)</span>
-            </div>
           </div>
         </div>
       </section>
@@ -134,14 +110,14 @@ const Index = () => {
       <section className="py-20 relative">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow">Platform Features</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-sm">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Platform Features</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
               Comprehensive tools for modern agricultural monitoring
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
+            <Card className="backdrop-blur-md bg-card/90 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/95">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
                   <Map className="w-8 h-8 text-primary" />
@@ -153,7 +129,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
+            <Card className="backdrop-blur-md bg-card/90 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/95">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors">
                   <BarChart3 className="w-8 h-8 text-accent" />
@@ -165,7 +141,7 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="backdrop-blur-md bg-card/70 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/80">
+            <Card className="backdrop-blur-md bg-card/90 border-2 hover:border-primary transition-all hover:shadow-lg group hover:bg-card/95">
               <CardHeader>
                 <div className="p-3 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-colors">
                   <TrendingUp className="w-8 h-8 text-secondary" />
@@ -198,7 +174,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t backdrop-blur-md bg-card/70 relative">
+      <footer className="py-8 border-t backdrop-blur-md bg-card/90 relative">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
           <p>© 2025 Soil Health Visualization Platform. Supporting sustainable agriculture.</p>
         </div>
