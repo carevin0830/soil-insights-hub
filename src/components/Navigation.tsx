@@ -27,14 +27,9 @@ const Navigation = () => {
           </a>
         </div>
 
-        {/* Admin Button */}
-        <Link to="/auth">
-          <Button 
-            variant="outline" 
-            className="border-2 border-white text-white hover:bg-white hover:text-background transition-all uppercase tracking-wider text-sm"
-          >
-            Admin
-          </Button>
+        {/* Admin Link */}
+        <Link to="/auth" className="text-white hover:text-primary transition-colors uppercase tracking-wider text-sm font-medium">
+          Admin
         </Link>
       </div>
     </nav>
