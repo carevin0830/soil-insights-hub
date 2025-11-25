@@ -127,8 +127,8 @@ const Index = () => {
         >
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Platform Features</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Platform Features</h2>
+              <p className="text-xl text-white/80 max-w-2xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                 Comprehensive tools for modern agricultural monitoring
               </p>
             </div>
@@ -175,7 +175,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="py-8 border-t border-white/10 backdrop-blur-md bg-transparent relative">
-          <div className="container mx-auto px-4 text-center text-muted-foreground">
+          <div className="container mx-auto px-4 text-center text-white/70">
             <p>© 2025 Soil Health Visualization Platform. Supporting sustainable agriculture.</p>
           </div>
         </footer>
