@@ -7,22 +7,17 @@ import SoilTemperatureMap from "@/components/SoilTemperatureMap";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import Navigation from "@/components/Navigation";
 import { ChevronDown } from "lucide-react";
-import { useParallax } from "@/hooks/use-parallax";
 
 const Index = () => {
   const mapSection = useScrollAnimation(0.2);
   const featuresSection = useScrollAnimation(0.2);
-  const parallaxOffset = useParallax(0.5);
 
   return (
     <div className="min-h-screen relative">
-      {/* Parallax Background */}
+      {/* Fixed Background */}
       <div 
-        className="fixed inset-0 bg-cover bg-center z-0 will-change-transform"
-        style={{ 
-          backgroundImage: `url(${agriculturalBg})`,
-          transform: `translateY(${parallaxOffset}px)`
-        }}
+        className="fixed inset-0 bg-cover bg-center bg-fixed z-0"
+        style={{ backgroundImage: `url(${agriculturalBg})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
       </div>
