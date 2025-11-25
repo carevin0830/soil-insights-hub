@@ -4,8 +4,12 @@ import { Link } from "react-router-dom";
 import { Map, BarChart3, Leaf, TrendingUp, Droplets, Thermometer } from "lucide-react";
 import agriculturalBg from "@/assets/agricultural-background.png";
 import SoilTemperatureMap from "@/components/SoilTemperatureMap";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const Index = () => {
+  const mapSection = useScrollAnimation(0.2);
+  const featuresSection = useScrollAnimation(0.2);
+
   return (
     <div className="min-h-screen relative">
       {/* Fixed Background */}
@@ -91,7 +95,12 @@ const Index = () => {
       </section>
 
       {/* Interactive Map Section */}
-      <section className="py-20 relative">
+      <section 
+        ref={mapSection.ref}
+        className={`py-20 relative transition-all duration-700 ${
+          mapSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Live Soil Data Map</h2>
@@ -107,7 +116,12 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 relative">
+      <section 
+        ref={featuresSection.ref}
+        className={`py-20 relative transition-all duration-700 ${
+          featuresSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">Platform Features</h2>
@@ -153,23 +167,6 @@ const Index = () => {
               </CardHeader>
             </Card>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Start Monitoring Today
-          </h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Join experts making data-driven agricultural decisions for better crop yields
-          </p>
-          <Link to="/auth">
-            <Button size="lg" variant="secondary" className="text-lg px-10 shadow-xl">
-              Sign Up Now
-            </Button>
-          </Link>
         </div>
       </section>
 
