@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, TrendingUp } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface SoilDataPoint {
   collected_at: string;
@@ -13,6 +13,10 @@ interface SoilDataPoint {
   ph: number;
   fertility_percentage: number | null;
   location_name: string | null;
+  nitrogen_level: number | null;
+  phosphorus_level: number | null;
+  potassium_level: number | null;
+  municipality_id: string;
 }
 
 interface Municipality {
@@ -57,7 +61,7 @@ export default function Analytics() {
 
       let query = supabase
         .from('soil_data')
-        .select('collected_at, temperature, ph, fertility_percentage, location_name, municipality_id')
+        .select('collected_at, temperature, ph, fertility_percentage, location_name, municipality_id, nitrogen_level, phosphorus_level, potassium_level')
         .gte('collected_at', daysAgo.toISOString())
         .order('collected_at', { ascending: true });
 
@@ -107,8 +111,50 @@ export default function Analytics() {
     };
   };
 
+  const formatNPKData = () => {
+    // Group data by municipality
+    const municipalityData: { [key: string]: { n: number[], p: number[], k: number[], name: string } } = {};
+    
+    soilData.forEach(point => {
+      const municipalityName = municipalities.find(m => m.id === point.municipality_id)?.name || 'Unknown';
+      if (!municipalityData[point.municipality_id]) {
+        municipalityData[point.municipality_id] = { n: [], p: [], k: [], name: municipalityName };
+      }
+      if (point.nitrogen_level) municipalityData[point.municipality_id].n.push(point.nitrogen_level);
+      if (point.phosphorus_level) municipalityData[point.municipality_id].p.push(point.phosphorus_level);
+      if (point.potassium_level) municipalityData[point.municipality_id].k.push(point.potassium_level);
+    });
+
+    // Calculate averages and format for radar chart
+    return Object.values(municipalityData)
+      .filter(data => data.n.length > 0 || data.p.length > 0 || data.k.length > 0)
+      .map(data => ({
+        municipality: data.name,
+        Nitrogen: data.n.length > 0 ? (data.n.reduce((a, b) => a + b, 0) / data.n.length).toFixed(1) : 0,
+        Phosphorus: data.p.length > 0 ? (data.p.reduce((a, b) => a + b, 0) / data.p.length).toFixed(1) : 0,
+        Potassium: data.k.length > 0 ? (data.k.reduce((a, b) => a + b, 0) / data.k.length).toFixed(1) : 0,
+      }));
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+          <p className="font-semibold text-foreground mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} style={{ color: entry.color }} className="text-sm">
+              {entry.name}: {entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   const chartData = formatChartData();
   const averages = calculateAverages();
+  const npkData = formatNPKData();
 
   return (
     <div className="min-h-screen bg-background">
@@ -206,60 +252,99 @@ export default function Analytics() {
               </Card>
             </div>
 
-            {/* Temperature Trend */}
+            {/* Multi-metric Trend Analysis */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5" />
-                  Temperature Trend
+                  Soil Health Trend Analysis
                 </CardTitle>
-                <CardDescription>Soil temperature over time</CardDescription>
+                <CardDescription>Historical soil health indicators</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="date" 
+                      className="text-muted-foreground"
+                    />
+                    <YAxis className="text-muted-foreground" />
+                    <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     <Line
                       type="monotone"
-                      dataKey="temperature"
-                      stroke="hsl(var(--primary))"
+                      dataKey="ph"
+                      stroke="hsl(142, 76%, 36%)"
                       strokeWidth={2}
-                      name="Temperature (°C)"
+                      name="pH"
+                      dot={{ r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="temperature"
+                      stroke="hsl(38, 92%, 50%)"
+                      strokeWidth={2}
+                      name="temperature"
+                      dot={{ r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="fertility"
+                      stroke="hsl(142, 71%, 45%)"
+                      strokeWidth={2}
+                      name="fertility"
+                      dot={{ r: 4 }}
+                      activeDot={{ r: 6 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
 
-            {/* pH Trend */}
-            <Card>
-              <CardHeader>
-                <CardTitle>pH Level Trend</CardTitle>
-                <CardDescription>Soil pH over time</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis domain={[0, 14]} />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="ph"
-                      stroke="hsl(var(--secondary))"
-                      strokeWidth={2}
-                      name="pH"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+            {/* NPK Nutrient Profile */}
+            {npkData.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>NPK Nutrient Profile</CardTitle>
+                  <CardDescription>Nitrogen, Phosphorus, and Potassium levels by municipality</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <RadarChart data={npkData}>
+                      <PolarGrid className="stroke-muted" />
+                      <PolarAngleAxis dataKey="municipality" className="text-muted-foreground" />
+                      <PolarRadiusAxis className="text-muted-foreground" />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend />
+                      <Radar
+                        name="Nitrogen"
+                        dataKey="Nitrogen"
+                        stroke="hsl(142, 76%, 36%)"
+                        fill="hsl(142, 76%, 36%)"
+                        fillOpacity={0.6}
+                      />
+                      <Radar
+                        name="Phosphorus"
+                        dataKey="Phosphorus"
+                        stroke="hsl(38, 92%, 50%)"
+                        fill="hsl(38, 92%, 50%)"
+                        fillOpacity={0.6}
+                      />
+                      <Radar
+                        name="Potassium"
+                        dataKey="Potassium"
+                        stroke="hsl(142, 71%, 45%)"
+                        fill="hsl(142, 71%, 45%)"
+                        fillOpacity={0.6}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Fertility Comparison */}
             <Card>
