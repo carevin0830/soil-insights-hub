@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
 interface SoilDataPoint {
   id: string;
@@ -30,7 +33,7 @@ const getRadius = (temp: number): number => {
   return Math.max(8, Math.min(20, temp * 0.5));
 };
 
-export default function SoilMap({ soilData }: SoilMapProps) {
+function SoilMap({ soilData }: SoilMapProps) {
   const mapCenter = useMemo<[number, number]>(() => {
     if (soilData.length === 0) return [17.5969, 120.8472];
     
@@ -116,3 +119,5 @@ export default function SoilMap({ soilData }: SoilMapProps) {
     </div>
   );
 }
+
+export default SoilMap;
