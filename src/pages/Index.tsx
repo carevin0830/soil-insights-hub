@@ -7,15 +7,17 @@ import SoilTemperatureMap from "@/components/SoilTemperatureMap";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen relative">
       {/* Fixed Background */}
       <div 
-        className="fixed inset-0 bg-cover bg-center bg-fixed -z-10"
+        className="fixed inset-0 bg-cover bg-center z-0"
         style={{ backgroundImage: `url(${agriculturalBg})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/75 to-background/85" />
       </div>
 
+      {/* Content Wrapper */}
+      <div className="relative z-10">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         
@@ -201,6 +203,7 @@ const Index = () => {
           <p>© 2025 Soil Health Visualization Platform. Supporting sustainable agriculture.</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
