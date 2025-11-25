@@ -71,7 +71,7 @@ export default function SoilTemperatureMap() {
       <div className="p-6">
         <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <p className="text-sm text-blue-800 dark:text-blue-200">
-            <strong>Interactive OpenStreetMap Coming Soon!</strong> Map visualization with temperature markers will be available in the next update.
+            Map visualization with temperature markers will be available in the next update.
           </p>
         </div>
         
