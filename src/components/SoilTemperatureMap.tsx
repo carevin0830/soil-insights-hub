@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { supabase } from '@/integrations/supabase/client';
 import 'leaflet/dist/leaflet.css';
 import { Card } from './ui/card';
@@ -15,26 +15,11 @@ interface SoilDataPoint {
   temp_category: string | null;
 }
 
-// Component to fit bounds when data loads
-function MapBounds({ points }: { points: SoilDataPoint[] }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (points.length > 0) {
-      const bounds = points.map(point => {
-        const coords = point.location.coordinates;
-        return [coords[1], coords[0]] as [number, number];
-      });
-      map.fitBounds(bounds, { padding: [50, 50] });
-    }
-  }, [points, map]);
-
-  return null;
-}
-
 export default function SoilTemperatureMap() {
   const [soilData, setSoilData] = useState<SoilDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([17.5969, 120.8472]);
+  const [mapZoom, setMapZoom] = useState(11);
 
   useEffect(() => {
     fetchSoilData();
@@ -48,7 +33,21 @@ export default function SoilTemperatureMap() {
         .order('collected_at', { ascending: false });
 
       if (error) throw error;
-      setSoilData(data || []);
+      
+      if (data && data.length > 0) {
+        setSoilData(data);
+        // Calculate center from all points
+        const avgLat = data.reduce((sum, point) => {
+          const coords = point.location as { coordinates: [number, number] };
+          return sum + coords.coordinates[1];
+        }, 0) / data.length;
+        const avgLng = data.reduce((sum, point) => {
+          const coords = point.location as { coordinates: [number, number] };
+          return sum + coords.coordinates[0];
+        }, 0) / data.length;
+        setMapCenter([avgLat, avgLng]);
+        setMapZoom(11);
+      }
     } catch (error) {
       console.error('Error fetching soil data:', error);
     } finally {
@@ -90,15 +89,12 @@ export default function SoilTemperatureMap() {
     );
   }
 
-  // Default center (Abra, Philippines region)
-  const defaultCenter: [number, number] = [17.5969, 120.8472];
-
   return (
     <Card className="overflow-hidden">
       <div className="h-[500px] w-full">
         <MapContainer
-          center={defaultCenter}
-          zoom={11}
+          center={mapCenter}
+          zoom={mapZoom}
           className="h-full w-full"
           scrollWheelZoom={true}
         >
@@ -107,8 +103,6 @@ export default function SoilTemperatureMap() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
-          <MapBounds points={soilData} />
-
           {soilData.map((point) => {
             const coords = point.location.coordinates;
             const position: [number, number] = [coords[1], coords[0]];
