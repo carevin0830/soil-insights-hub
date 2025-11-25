@@ -193,7 +193,7 @@ const Dashboard = () => {
 
         {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
+          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/add-soil-data')}>
             <CardHeader>
               <Plus className="w-10 h-10 mb-3 text-secondary" />
               <CardTitle>Add Soil Data</CardTitle>
@@ -202,13 +202,13 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" disabled>
-                Coming Soon
+              <Button className="w-full">
+                Get Started
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
+          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/analytics')}>
             <CardHeader>
               <BarChart3 className="w-10 h-10 mb-3 text-accent" />
               <CardTitle>View Analytics</CardTitle>
@@ -217,8 +217,8 @@ const Dashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" disabled>
-                Coming Soon
+              <Button className="w-full">
+                View Charts
               </Button>
             </CardContent>
           </Card>
