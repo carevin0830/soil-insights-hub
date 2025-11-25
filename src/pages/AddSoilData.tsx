@@ -7,9 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
-import { ArrowLeft, MapPin, Save } from 'lucide-react';
+import { ArrowLeft, MapPin, Save, CalendarIcon } from 'lucide-react';
 import { z } from 'zod';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -25,6 +29,7 @@ const soilDataSchema = z.object({
   municipality_id: z.string().uuid('Please select a municipality'),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
+  collected_at: z.date({ required_error: 'Collection date is required' }),
 });
 
 interface Municipality {
@@ -37,6 +42,7 @@ export default function AddSoilData() {
   const [loading, setLoading] = useState(false);
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [collectionDate, setCollectionDate] = useState<Date | undefined>(new Date());
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
@@ -124,6 +130,11 @@ export default function AddSoilData() {
 
     setLoading(true);
 
+    if (!collectionDate) {
+      toast.error('Please select a collection date');
+      return;
+    }
+
     try {
       // Parse and validate form data
       const validatedData = soilDataSchema.parse({
@@ -138,6 +149,7 @@ export default function AddSoilData() {
         municipality_id: formData.municipality_id,
         latitude: selectedLocation.lat,
         longitude: selectedLocation.lng,
+        collected_at: collectionDate,
       });
 
       // Insert soil data
@@ -152,7 +164,7 @@ export default function AddSoilData() {
         notes: validatedData.notes,
         municipality_id: validatedData.municipality_id,
         location: `POINT(${validatedData.longitude} ${validatedData.latitude})`,
-        collected_at: new Date().toISOString(),
+        collected_at: validatedData.collected_at.toISOString(),
       });
 
       if (error) throw error;
@@ -238,6 +250,34 @@ export default function AddSoilData() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Collection Date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !collectionDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {collectionDate ? format(collectionDate, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={collectionDate}
+                        onSelect={setCollectionDate}
+                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </CardContent>
             </Card>
