@@ -60,10 +60,10 @@ const Index = () => {
         </section>
 
         {/* Key Stats Cards */}
-        <section className="py-20 relative bg-background/80 backdrop-blur-md">
+        <section className="py-20 relative">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="backdrop-blur-md bg-card/95 border-2 shadow-xl hover:shadow-2xl transition-all group">
+              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/20 transition-colors">
                     <Droplets className="w-10 h-10 text-primary" />
@@ -73,7 +73,7 @@ const Index = () => {
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/95 border-2 shadow-xl hover:shadow-2xl transition-all group">
+              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-secondary/10 w-fit mb-4 group-hover:bg-secondary/20 transition-colors">
                     <Thermometer className="w-10 h-10 text-secondary" />
@@ -83,7 +83,7 @@ const Index = () => {
                 </CardHeader>
               </Card>
 
-              <Card className="backdrop-blur-md bg-card/95 border-2 shadow-xl hover:shadow-2xl transition-all group">
+              <Card className="backdrop-blur-md bg-card/60 border-2 shadow-xl hover:shadow-2xl transition-all group hover:bg-card/70">
                 <CardHeader className="text-center">
                   <div className="mx-auto p-4 rounded-xl bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors">
                     <Map className="w-10 h-10 text-accent" />
@@ -121,7 +121,7 @@ const Index = () => {
         <section 
           id="features"
           ref={featuresSection.ref}
-          className={`py-20 relative bg-background/80 backdrop-blur-md transition-all duration-700 ${
+          className={`py-20 relative transition-all duration-700 ${
             featuresSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -174,7 +174,7 @@ const Index = () => {
         </section>
 
         {/* Footer */}
-        <footer className="py-8 border-t backdrop-blur-md bg-background/90 relative">
+        <footer className="py-8 border-t border-white/10 backdrop-blur-md bg-transparent relative">
           <div className="container mx-auto px-4 text-center text-muted-foreground">
             <p>© 2025 Soil Health Visualization Platform. Supporting sustainable agriculture.</p>
           </div>
