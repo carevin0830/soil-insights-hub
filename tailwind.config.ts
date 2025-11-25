@@ -102,13 +102,16 @@ export default {
             opacity: "1"
           },
           "65%": { 
-            transform: "scale(0.9)"
+            transform: "scale(0.9)",
+            opacity: "1"
           },
           "80%": { 
-            transform: "scale(1.05)"
+            transform: "scale(1.05)",
+            opacity: "1"
           },
           "100%": { 
-            transform: "scale(1)"
+            transform: "scale(1)",
+            opacity: "1"
           },
         },
       },
