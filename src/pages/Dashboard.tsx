@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, LogOut, Map, BarChart3, Plus, Users } from "lucide-react";
+import { Leaf, LogOut, Map, BarChart3, Plus, Users, Database, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import SoilTemperatureMap from "@/components/SoilTemperatureMap";
 
@@ -140,6 +140,58 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
+        {/* Quick Actions Toolbar */}
+        <div className="mb-8 bg-card rounded-lg border p-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+            Quick Actions
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => navigate('/add-soil-data')}
+              className="flex items-center gap-2"
+              size="lg"
+            >
+              <Plus className="w-5 h-5" />
+              <span>Add Soil Data</span>
+            </Button>
+            
+            <Button
+              onClick={() => navigate('/analytics')}
+              variant="secondary"
+              className="flex items-center gap-2"
+              size="lg"
+            >
+              <TrendingUp className="w-5 h-5" />
+              <span>View Analytics</span>
+            </Button>
+
+            <Button
+              onClick={() => navigate('/dashboard')}
+              variant="outline"
+              className="flex items-center gap-2"
+              size="lg"
+            >
+              <Map className="w-5 h-5" />
+              <span>View Map</span>
+            </Button>
+
+            <Button
+              onClick={() => {
+                const mapSection = document.getElementById('map-section');
+                if (mapSection) {
+                  mapSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              variant="outline"
+              className="flex items-center gap-2"
+              size="lg"
+            >
+              <Database className="w-5 h-5" />
+              <span>Browse Data</span>
+            </Button>
+          </div>
+        </div>
+
         {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/add-soil-data')}>
@@ -233,7 +285,7 @@ const Dashboard = () => {
         </div>
 
         {/* Map Section */}
-        <div className="mb-8">
+        <div className="mb-8" id="map-section">
           <div className="flex items-center gap-3 mb-4">
             <Map className="w-6 h-6 text-primary" />
             <h2 className="text-2xl font-bold">Soil Temperature Map</h2>
