@@ -123,6 +123,39 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Action Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/add-soil-data')}>
+            <CardHeader>
+              <Plus className="w-10 h-10 mb-3 text-secondary" />
+              <CardTitle>Add Soil Data</CardTitle>
+              <CardDescription>
+                Record new soil test measurements
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full">
+                Get Started
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/analytics')}>
+            <CardHeader>
+              <BarChart3 className="w-10 h-10 mb-3 text-accent" />
+              <CardTitle>View Analytics</CardTitle>
+              <CardDescription>
+                Charts and historical trend analysis
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full">
+                View Charts
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Quick Stats */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -189,39 +222,6 @@ const Dashboard = () => {
             <h2 className="text-2xl font-bold">Soil Temperature Map</h2>
           </div>
           <SoilTemperatureMap />
-        </div>
-
-        {/* Action Cards */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/add-soil-data')}>
-            <CardHeader>
-              <Plus className="w-10 h-10 mb-3 text-secondary" />
-              <CardTitle>Add Soil Data</CardTitle>
-              <CardDescription>
-                Record new soil test measurements
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full">
-                Get Started
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 hover:border-primary transition-colors cursor-pointer" onClick={() => navigate('/analytics')}>
-            <CardHeader>
-              <BarChart3 className="w-10 h-10 mb-3 text-accent" />
-              <CardTitle>View Analytics</CardTitle>
-              <CardDescription>
-                Charts and historical trend analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full">
-                View Charts
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Info Card */}
