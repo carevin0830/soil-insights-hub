@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Leaf, LogOut, Map, BarChart3, Plus, Users } from "lucide-react";
 import { toast } from "sonner";
+import SoilTemperatureMap from "@/components/SoilTemperatureMap";
 
 interface DashboardStats {
   totalSamples: number;
@@ -181,23 +182,17 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Action Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
-            <CardHeader>
-              <Map className="w-10 h-10 mb-3 text-primary" />
-              <CardTitle>View Map</CardTitle>
-              <CardDescription>
-                Interactive GIS visualization of soil data points
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full" disabled>
-                Coming Soon
-              </Button>
-            </CardContent>
-          </Card>
+        {/* Map Section */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Map className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold">Soil Temperature Map</h2>
+          </div>
+          <SoilTemperatureMap />
+        </div>
 
+        {/* Action Cards */}
+        <div className="grid md:grid-cols-2 gap-6">
           <Card className="border-2 hover:border-primary transition-colors cursor-pointer">
             <CardHeader>
               <Plus className="w-10 h-10 mb-3 text-secondary" />
