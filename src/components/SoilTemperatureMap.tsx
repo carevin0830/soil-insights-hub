@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from './ui/card';
 import { MapPin } from 'lucide-react';
+import 'leaflet/dist/leaflet.css';
 
 interface SoilDataPoint {
   id: string;
@@ -12,6 +14,7 @@ interface SoilDataPoint {
   location_name: string | null;
   collected_at: string | null;
   temp_category: string | null;
+  coordinates?: [number, number];
 }
 
 const getTemperatureColor = (temp: number): string => {
@@ -38,7 +41,32 @@ export default function SoilTemperatureMap() {
         .order('collected_at', { ascending: false});
 
       if (error) throw error;
-      setSoilData(data || []);
+      
+      // Extract coordinates from PostGIS geometry
+      const dataWithCoords = (data || []).map(point => {
+        try {
+          // PostGIS returns geometry as GeoJSON
+          if (point.location && typeof point.location === 'object' && 'coordinates' in point.location) {
+            const coords = (point.location as any).coordinates;
+            if (coords && Array.isArray(coords) && coords.length === 2) {
+              return {
+                ...point,
+                coordinates: [coords[1], coords[0]] as [number, number] // [lat, lng]
+              };
+            }
+          }
+        } catch (e) {
+          console.error('Error parsing coordinates for point:', point.id, e);
+        }
+        return point;
+      });
+      
+      // Type guard to filter only points with coordinates
+      const hasCoordinates = (point: any): point is SoilDataPoint & { coordinates: [number, number] } => {
+        return point.coordinates !== undefined;
+      };
+      
+      setSoilData(dataWithCoords.filter(hasCoordinates));
     } catch (error) {
       console.error('Error fetching soil data:', error);
     } finally {
@@ -66,15 +94,88 @@ export default function SoilTemperatureMap() {
     );
   }
 
+  // Calculate map center from data points
+  const getMapCenter = (): [number, number] => {
+    if (soilData.length === 0) return [0, 0];
+    
+    const validPoints = soilData.filter((p): p is SoilDataPoint & { coordinates: [number, number] } => 
+      p.coordinates !== undefined
+    );
+    
+    if (validPoints.length === 0) return [0, 0];
+    
+    const avgLat = validPoints.reduce((sum, p) => sum + p.coordinates[0], 0) / validPoints.length;
+    const avgLng = validPoints.reduce((sum, p) => sum + p.coordinates[1], 0) / validPoints.length;
+    
+    return [avgLat, avgLng];
+  };
+
   return (
     <Card className="overflow-hidden">
       <div className="p-6">
-        <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
-            Map visualization with temperature markers will be available in the next update.
-          </p>
+        {/* Interactive Map */}
+        <div className="mb-6 h-[500px] rounded-lg overflow-hidden border border-border">
+          <MapContainer
+            center={getMapCenter()}
+            zoom={soilData.length > 0 ? 10 : 2}
+            style={{ height: '100%', width: '100%' }}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {soilData.map((point) => (
+              point.coordinates && (
+                <CircleMarker
+                  key={point.id}
+                  center={point.coordinates}
+                  radius={10}
+                  fillColor={getTemperatureColor(point.temperature)}
+                  color="#fff"
+                  weight={2}
+                  opacity={1}
+                  fillOpacity={0.8}
+                >
+                  <Popup>
+                    <div className="p-2">
+                      <h4 className="font-semibold mb-2">
+                        {point.location_name || 'Unknown Location'}
+                      </h4>
+                      <div className="space-y-1 text-sm">
+                        <p>
+                          <span className="font-medium">Temperature:</span>{' '}
+                          <span style={{ color: getTemperatureColor(point.temperature) }}>
+                            {point.temperature.toFixed(1)}°C
+                          </span>
+                          {point.temp_category && (
+                            <span className="text-xs ml-1">({point.temp_category})</span>
+                          )}
+                        </p>
+                        <p>
+                          <span className="font-medium">pH:</span> {point.ph.toFixed(2)}
+                        </p>
+                        {point.fertility_percentage && (
+                          <p>
+                            <span className="font-medium">Fertility:</span>{' '}
+                            {point.fertility_percentage.toFixed(1)}%
+                          </p>
+                        )}
+                        {point.collected_at && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(point.collected_at).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Popup>
+                </CircleMarker>
+              )
+            ))}
+          </MapContainer>
         </div>
         
+        {/* Data Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {soilData.map((point) => (
             <div
