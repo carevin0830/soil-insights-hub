@@ -11,6 +11,7 @@ import { ChevronDown } from "lucide-react";
 const Index = () => {
   const mapSection = useScrollAnimation(0.2);
   const featuresSection = useScrollAnimation(0.2);
+  const heroSection = useScrollAnimation(0.1);
 
   return (
     <div className="min-h-screen relative">
@@ -28,17 +29,26 @@ const Index = () => {
       {/* Content Wrapper */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+        <section 
+          ref={heroSection.ref}
+          className="relative h-screen flex flex-col items-center justify-center overflow-hidden"
+        >
           <div className="relative z-10 container mx-auto px-4 max-w-7xl text-center">
-            <h1 className="text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none animate-pop-bounce">
+            <h1 className={`text-7xl md:text-9xl font-black mb-6 text-white tracking-tight leading-none ${
+              heroSection.isVisible ? 'animate-pop-bounce' : 'opacity-0 scale-0'
+            }`}>
               SOIL HEALTH
             </h1>
-            <p className="text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light animate-pop-bounce [animation-delay:0.2s] opacity-0">
+            <p className={`text-lg md:text-xl mb-12 text-white/90 uppercase tracking-[0.3em] font-light ${
+              heroSection.isVisible ? 'animate-pop-bounce [animation-delay:0.2s]' : 'opacity-0 scale-0'
+            }`}>
               Monitoring Platform
             </p>
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl animate-pop-bounce [animation-delay:0.4s] opacity-0"
+              className={`bg-primary hover:bg-primary/90 text-primary-foreground text-sm uppercase tracking-wider px-12 py-6 shadow-2xl ${
+                heroSection.isVisible ? 'animate-pop-bounce [animation-delay:0.4s]' : 'opacity-0 scale-0'
+              }`}
               onClick={() => {
                 document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
