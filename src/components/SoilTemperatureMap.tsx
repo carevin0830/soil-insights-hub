@@ -134,12 +134,11 @@ export default function SoilTemperatureMap() {
       toast.success('Soil data updated successfully');
       setEditingPoint(null);
       
-      // Refresh map
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
+      // Refresh data without removing map
       await fetchSoilData();
+      
+      // Reload the page to refresh the map
+      window.location.reload();
     } catch (error: any) {
       toast.error('Failed to update soil data');
       console.error('Error updating soil data:', error);
@@ -150,7 +149,7 @@ export default function SoilTemperatureMap() {
     if (!deletingPoint) return;
 
     try {
-      const { data, error, count } = await supabase
+      const { data, error } = await supabase
         .from('soil_data')
         .delete()
         .eq('id', deletingPoint.id)
@@ -160,7 +159,7 @@ export default function SoilTemperatureMap() {
 
       // Check if anything was actually deleted
       if (!data || data.length === 0) {
-        toast.error('Failed to delete: You may not have permission to delete this data. Contact an administrator.');
+        toast.error('Failed to delete: You may not have permission to delete this data.');
         setDeletingPoint(null);
         return;
       }
@@ -168,12 +167,8 @@ export default function SoilTemperatureMap() {
       toast.success('Soil data deleted successfully');
       setDeletingPoint(null);
       
-      // Refresh map
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-      await fetchSoilData();
+      // Reload the page to refresh the map
+      window.location.reload();
     } catch (error: any) {
       toast.error('Failed to delete soil data');
       console.error('Error deleting soil data:', error);
