@@ -241,86 +241,10 @@ export default function SoilTemperatureMap() {
       <Card className="p-6">
         <div className="flex items-center justify-center h-[500px]">
           <p className="text-muted-foreground">No soil data available yet</p>
-      </div>
-
-      {/* Edit Dialog */}
-      <Dialog open={!!editingPoint} onOpenChange={(open) => !open && setEditingPoint(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Soil Data</DialogTitle>
-            <DialogDescription>
-              Update the soil measurements for this location
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="location_name">Location Name</Label>
-              <Input
-                id="location_name"
-                value={editForm.location_name}
-                onChange={(e) => setEditForm({ ...editForm, location_name: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="temperature">Temperature (°C)</Label>
-              <Input
-                id="temperature"
-                type="number"
-                step="0.1"
-                value={editForm.temperature}
-                onChange={(e) => setEditForm({ ...editForm, temperature: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ph">pH Level</Label>
-              <Input
-                id="ph"
-                type="number"
-                step="0.01"
-                value={editForm.ph}
-                onChange={(e) => setEditForm({ ...editForm, ph: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="fertility">Fertility Percentage</Label>
-              <Input
-                id="fertility"
-                type="number"
-                step="0.1"
-                value={editForm.fertility_percentage}
-                onChange={(e) => setEditForm({ ...editForm, fertility_percentage: e.target.value })}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingPoint(null)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSaveEdit}>Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation */}
-      <AlertDialog open={!!deletingPoint} onOpenChange={(open) => !open && setDeletingPoint(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Soil Data</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete the data for "{deletingPoint?.location_name || 'Unknown Location'}"? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </Card>
-  );
-}
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="overflow-hidden">
@@ -435,6 +359,82 @@ export default function SoilTemperatureMap() {
           </div>
         </div>
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={!!editingPoint} onOpenChange={(open) => !open && setEditingPoint(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Soil Data</DialogTitle>
+            <DialogDescription>
+              Update the soil measurements for this location
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="location_name">Location Name</Label>
+              <Input
+                id="location_name"
+                value={editForm.location_name}
+                onChange={(e) => setEditForm({ ...editForm, location_name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="temperature">Temperature (°C)</Label>
+              <Input
+                id="temperature"
+                type="number"
+                step="0.1"
+                value={editForm.temperature}
+                onChange={(e) => setEditForm({ ...editForm, temperature: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ph">pH Level</Label>
+              <Input
+                id="ph"
+                type="number"
+                step="0.01"
+                value={editForm.ph}
+                onChange={(e) => setEditForm({ ...editForm, ph: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fertility">Fertility Percentage</Label>
+              <Input
+                id="fertility"
+                type="number"
+                step="0.1"
+                value={editForm.fertility_percentage}
+                onChange={(e) => setEditForm({ ...editForm, fertility_percentage: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingPoint(null)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={!!deletingPoint} onOpenChange={(open) => !open && setDeletingPoint(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Soil Data</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete the data for "{deletingPoint?.location_name || 'Unknown Location'}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
