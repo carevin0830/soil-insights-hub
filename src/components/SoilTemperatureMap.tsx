@@ -150,12 +150,20 @@ export default function SoilTemperatureMap() {
     if (!deletingPoint) return;
 
     try {
-      const { error } = await supabase
+      const { data, error, count } = await supabase
         .from('soil_data')
         .delete()
-        .eq('id', deletingPoint.id);
+        .eq('id', deletingPoint.id)
+        .select();
 
       if (error) throw error;
+
+      // Check if anything was actually deleted
+      if (!data || data.length === 0) {
+        toast.error('Failed to delete: You may not have permission to delete this data. Contact an administrator.');
+        setDeletingPoint(null);
+        return;
+      }
 
       toast.success('Soil data deleted successfully');
       setDeletingPoint(null);
