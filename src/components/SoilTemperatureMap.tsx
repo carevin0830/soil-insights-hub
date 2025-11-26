@@ -134,11 +134,13 @@ export default function SoilTemperatureMap() {
       toast.success('Soil data updated successfully');
       setEditingPoint(null);
       
-      // Refresh data without removing map
-      await fetchSoilData();
+      // Remove map and refresh data
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
       
-      // Reload the page to refresh the map
-      window.location.reload();
+      await fetchSoilData();
     } catch (error: any) {
       toast.error('Failed to update soil data');
       console.error('Error updating soil data:', error);
@@ -167,8 +169,13 @@ export default function SoilTemperatureMap() {
       toast.success('Soil data deleted successfully');
       setDeletingPoint(null);
       
-      // Reload the page to refresh the map
-      window.location.reload();
+      // Remove map and refresh data
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+      
+      await fetchSoilData();
     } catch (error: any) {
       toast.error('Failed to delete soil data');
       console.error('Error deleting soil data:', error);
