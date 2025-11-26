@@ -30,7 +30,7 @@ export default function Analytics() {
   const [soilData, setSoilData] = useState<SoilDataPoint[]>([]);
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   const [selectedMunicipality, setSelectedMunicipality] = useState<string>('all');
-  const [timeRange, setTimeRange] = useState<string>('30');
+  const [timeRange, setTimeRange] = useState<string>('90');
 
   useEffect(() => {
     fetchMunicipalities();
